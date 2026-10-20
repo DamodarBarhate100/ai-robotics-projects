@@ -24,6 +24,16 @@ class JARVIS{
         void neutral_position();
         void print_robot_status();
         void move_servo(int id, double angle);
+        
+
+        // setters
+        void set_servo_offset(int id, float offset);
+        void set_servo_soft_limits(int id, double min_deg, double max_deg);
+        
+        // getters
+        float get_servo_offset(int id) const;
+        double get_servo_applied_angle(int id) const;
+        double get_servo_requested_angle(int id) const;
 
 };
 

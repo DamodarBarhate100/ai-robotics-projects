@@ -2,7 +2,7 @@
 #include<Arduino.h>
 #include<Adafruit_PWMServoDriver.h>
 #include<Wire.h>
-
+#include<math.h>
 
 JARVIS::JARVIS()
     :pwm(0x40),
@@ -52,10 +52,51 @@ void JARVIS::print_robot_status(){
     }
 }
 
+
 void JARVIS::move_servo(int id, double degree){
     if(id < 1 || id > SERVO_COUNT){
+        Serial.println("Invalid servo id");
         return;
     }
     all_servos[id-1]->move_servo(degree);
 }
 
+void JARVIS::set_servo_offset(int id, float offset){
+    if(id < 1 || id > SERVO_COUNT){
+        Serial.println("Invalid servo id");
+        return;
+    }
+    all_servos[id-1]->save_offset(offset);
+}
+
+
+void JARVIS::set_servo_soft_limits(int id, double min_deg_val, double max_deg_val){
+    if(id < 1 || id > SERVO_COUNT){
+        Serial.println("Invalid servo id");
+        return;
+    }
+    all_servos[id-1]->set_soft_limits(min_deg_val, max_deg_val);
+}
+
+double JARVIS::get_servo_applied_angle(int id) const{
+    if(id < 1 || id > SERVO_COUNT){
+        Serial.println("Invalid servo id");
+        return NAN;
+    }
+    return all_servos[id-1]->get_applied_angle();
+}
+
+float JARVIS::get_servo_offset(int id) const{
+    if(id < 1 || id > SERVO_COUNT){
+        Serial.println("Invalid servo id");
+        return NAN;
+    }
+    return all_servos[id-1]->get_offset();
+}
+double JARVIS::get_servo_requested_angle(int id) const{
+    if(id < 1 || id > SERVO_COUNT){
+        Serial.println("Invalid servo id");
+        return NAN;
+    }
+    return all_servos[id-1]->get_requested_angle();
+}

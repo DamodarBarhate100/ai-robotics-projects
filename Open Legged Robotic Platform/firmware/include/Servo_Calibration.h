@@ -9,7 +9,8 @@ struct servo_config{
     uint8_t  pca_channel;
     double servo_offset;
     double neutral_angle;
-    double current_angle;
+    double current_angle = 0.0;
+    double requested_angle = 0.0;
 
 
 };
@@ -17,8 +18,8 @@ struct servo_config{
 class Servo_Calibration{
     private:
         servo_config config;
-        int max_angle;
-        int min_angle;
+        double max_angle = 90.0;
+        double min_angle = -90.0;
         Adafruit_PWMServoDriver& pwm;
     public:
         Servo_Calibration( Adafruit_PWMServoDriver& driver, uint8_t channel, int servo_id, const char* servo_name, double neutral_angle, float offset=0);
@@ -39,6 +40,12 @@ class Servo_Calibration{
         void print_configuration();
         void print_logical_angle();
 
+        void set_soft_limits(double min_deg, double max_deg);
+        
+        // getter
+        double get_applied_angle() const;
+        double get_offset() const;
+        double get_requested_angle() const;
 };
 
 #endif
